@@ -11,7 +11,7 @@ Auteurs : THOMAS KILLIAN et TAVIER LÉA
 
 
 ## Rendu 2
-
+```Date de rendue: 15/12 23h59 (comme indiqué sur Chamillo)```
 (Une dizaine de lignes devrait suffire à chaque fois)
 
 * Comment avez-vous choisi de programmer l'analyse de texte (dont la lecture
