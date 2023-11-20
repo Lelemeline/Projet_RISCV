@@ -14,10 +14,14 @@ char *normalisation(char *line){
     return line;
 }
 
-// char *identification(char *line){
-//     int i=0;
-//     while (line[i]!='\0'){
+char *identification(char *line){
+    int i=0;
+    char cons = '';
+    while (line[i]!=' '){
+        cons[i] = line[i]; 
+    }
+    case(cons){
+        case "add": e_addi(line);
+    }
 
-
-//     }
-// }
+}
