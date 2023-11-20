@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "utils.h"
 
 int main(int argc, char **argv)
 {
@@ -21,11 +22,12 @@ int main(int argc, char **argv)
     fs = fopen(hex_output_file,"w");
 
     /*programme*/
-    char *buffer = NULL;
-    size_t buf_size = 20;
-    buffer = malloc(buf_size*sizeof(char));
-    getline(&buffer,&buf_size,fe);
-    printf("%s\n",buffer);
+    char *buffer = NULL; // buffer = contient chacune des lignes dans son ensemble
+    size_t size = 0; // taille du buffer
+    size_t buf_size;
+    while((buf_size = getline(&buffer,&buf_size,fe))!=-1){ // lit le fichier ligne à ligne
+        printf("%s\n",buffer);
+    }
 
     fclose(fe);
     fclose(fs);
