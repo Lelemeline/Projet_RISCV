@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     size_t size = 0; // taille du buffer
     size_t buf_size;
     while((buf_size = getline(&buffer,&buf_size,fe))!=-1){ // lit le fichier ligne à ligne
-        printf("%s\n",buffer);
+        if(buffer[0]=='#') break; // on ignore les lignes avec des commentaires
     }
 
     fclose(fe);
