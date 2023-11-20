@@ -3,7 +3,7 @@
 char *normalisation(char *line){
     int i=0;
     if (line[0]=='#'){  //test pour les commentaires
-        return '';
+        line='';
     }
     while (line[i]!='\0'){
         if (line[i]==','){
