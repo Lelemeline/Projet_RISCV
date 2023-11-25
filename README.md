@@ -12,6 +12,7 @@ Auteurs : THOMAS KILLIAN et TAVIER LÉA
 
 ## Rendu 2
 ```Date de rendue: 15/12 23h59 (comme indiqué sur Chamillo)```
+# commande pour test facile : make && ./riscv-assembler tests/add-simple.s test.hex && cat test.hex
 (Une dizaine de lignes devrait suffire à chaque fois)
 
 * Comment avez-vous choisi de programmer l'analyse de texte (dont la lecture
