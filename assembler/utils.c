@@ -27,11 +27,13 @@ char *rcp_instr(char *line, char *cons) {
     return original_dest;
 }
 
+
 char *identification(char *line){
     char *cons = malloc(strlen (line));
     rcp_instr(line,cons);
     if(strcmp(cons,"addi")==0) {
         /* procédure appropriée*/
+        e_addi(line);
     }
     else if (strcmp(cons,"sub")==0){
          /* procédure appropriée*/
@@ -72,5 +74,6 @@ char *identification(char *line){
     else {
         /*renvoi d'erreur*/
     }
+    free(cons);
     return line ;
 }
