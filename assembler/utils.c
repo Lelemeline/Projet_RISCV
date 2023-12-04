@@ -16,6 +16,8 @@ char *normalisation(char *line){
     while (line[i]!='\0'){ // tant qu'une ligne de code n'est pas vide
         if (line[i]==','){
             line[i]=' ';
+         if (line[i]>='A' && line[i]<='Z')
+            line[i]-='A'-'a';
         }
         i++;
     }
