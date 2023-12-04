@@ -92,7 +92,6 @@ void recup_arg(int a, char *line,char tab[2][10]) {
             registre[j++] = *line++;
         }
         registre[j] = '\0';
-        printf("%s\n",registre);
         strcpy(tab[i],registre);
         free(registre);
         if (*line == ' ') {
@@ -102,7 +101,6 @@ void recup_arg(int a, char *line,char tab[2][10]) {
 }
 void concatener(char *line, const char *st1, const char *st2) {
     while ((*st1 != '\0')) {*line++ = *st1++;}
-    *line++ = ' ';
     while ((*st2 != '\0')) {*line++ = *st2++;}
     *line = '\0';
 }
@@ -118,34 +116,31 @@ uint32_t identification(char *line){
     rcp_instr(line,cons);
     uint32_t code_assemble;
     if (strcmp(cons,"j")==0){
-        char *offset ;
+        char offset[2][10] ;
         recup_arg(1,line,offset);
         char *ist = malloc(sizeof(line));
-        concatener(ist,"jal x0, ","offset");
+        concatener(ist,"jal x0 ",offset[0]);
         return identification(ist);
     }
     else if (strcmp(cons,"li")==0){
-       char *rgst[2][5];
-       recup_arg(2,line,rgst);
-       char *ist = malloc(sizeof(line));
-       concatener(ist,"addi",rgst[0]);
-       concatener(ist,ist,", zero, ");
-       concatener(ist,ist,rgst[1]);
-       printf("%s\n",ist);
-       return identification(ist);
+        char  rgst[2][10];
+        recup_arg(2,line,rgst);
+        char *ist = malloc(sizeof(line));
+        concatener(ist,"addi ",rgst[0]);
+        concatener(ist,ist,"  zero  ");
+        concatener(ist,ist,rgst[1]);
+        return identification(ist);
     }
     else if (strcmp(cons,"mv")==0){
-        char *rgst[2][5];
+        char rgst[2][10];
         recup_arg(2,line,rgst);
-        printf("%s\n",rgst[1]);
         char *ist = malloc(sizeof(line));
-        concatener(ist,"addi",rgst[0]);
-        concatener(ist,ist,", ");
-        printf("%s\n",rgst[1]);
+        concatener(ist,"addi ",rgst[0]);
+        concatener(ist,ist,"  ");
         concatener(ist,ist,rgst[1]);
-        concatener(ist,ist,", 0");
-        printf("%s\n",ist);
-        return identification(ist);
+        concatener(ist,ist," 0");
+        uint32_t o = identification(ist);
+        return o;
     }
     else{
         int format = find_type(find_index_string(instruction,cons));
