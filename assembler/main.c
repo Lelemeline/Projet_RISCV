@@ -26,16 +26,19 @@ int main(int argc, char **argv)
 
     char *buffer = NULL; // buffer = contient chacune des lignes dans son ensemble
     size_t buf_size;
-    size_t line_size;
-    size_t end_buf = -1;
+    int line_size;
 
     /*programme*/
-    while((line_size = getline(&buffer,&buf_size,fe))!=end_buf){ // lit le fichier ligne à ligne
+
+    while((line_size = getline(&buffer,&buf_size,fe))!=-1){ // lit le fichier ligne à ligne
         buffer = normalisation(buffer);
-        fprintf(fs,"%s",buffer);
-        printf("%d",identification(buffer));
+        if (buffer[0]!='\0'){
+            //fprintf(fs,"%s",buffer);
+            //printf("%s",buffer);
+            fprintf(fs,"%x\n",identification(buffer));
+        }
+
     }
-    fprintf(fs,"\n");
     free(buffer);
 
     // pour l'instant on  1. normalise les lignes 2. on les identifie

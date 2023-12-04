@@ -15,9 +15,8 @@ typedef struct{
 char *normalisation(char *line);// permet d'enlever les virgules
 char *rcp_instr(char *line, char *cons); // récupération de l'instruction
 uint32_t identification(char *line); // identification de l'instruction
-void recup_2_arg(char *line, char *rd, char *imm); // recupere deux arguments
-void recup_3_arg(char *line,char tab[2][10]);// récupère trois arguments
-void ecriture(char nomFichier[], char *donnee) ;
+void recup_arg(int a, char *line,char tab[2][10]);// récupère trois arguments
+void concatener(char *line, const char *st1, const char *st2);
 int find_index_char(char *tab, char instr, int index);
 int find_index_string(char tab[32][5], char *instr) ;
 int normalisation_rgstr(char *tab);
