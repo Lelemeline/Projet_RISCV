@@ -24,7 +24,7 @@ char *normalisation(char *line){
     return line;
 }
 
-char *rcp_instr(char *line, char *cons) {
+char *rcp_instr(char *line, char *cons) {   //récupère l'instruction
     char *original_dest = cons;
     while (*line != ' ') {
         *cons++ = *line++;
@@ -33,13 +33,13 @@ char *rcp_instr(char *line, char *cons) {
     return original_dest;
 }
 
-int find_index_char(char *tab, char instr, int index) {
+int find_index_char(char *tab, char instr, int index) { //prend un tableau et un caractère en argument et cherche le caractère dans le tableau
     if (*tab == instr) return index;
     if (*tab == '\0') return -1;
     return find_index_char(tab + 1, instr, index + 1);
 }
 
-int find_index_string(char tab[32][5], char *instr) {
+int find_index_string(char tab[32][5], char *instr) { //la même chose qu'avant mais avec une chaine de caractères
     for (int i = 0; i < 32; i++) {
         if (strcmp(tab[i], instr) == 0) {
             return i;
@@ -48,7 +48,7 @@ int find_index_string(char tab[32][5], char *instr) {
     return -1;
 }
 
-int conversion(char *tab){
+int conversion(char *tab){ //prend en argument un tableau de caractères et renvoie l'int correspondant 
     int i=0;
     int nombre;
     while(tab[i]!='\0'){
@@ -57,7 +57,7 @@ int conversion(char *tab){
     return nombre;
 }
 
-int find_type(int x){
+int find_type(int x){            
      if(0<=x && x<2) return 0 ;
      if (2<=x && x<4) return 1;
      if (x==4) return 2;
