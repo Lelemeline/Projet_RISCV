@@ -1,27 +1,24 @@
-char *normalisation(char *line); // permet d'enlever les virgules
-char *rcp_instr(char *line,char *cons); // récupération de l'instruction
-char *identification(char *line); // identification de l'instruction
+/* déclaration de librairies*/
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+typedef struct{
+    uint32_t opcode  ;
+    uint32_t registres[3] ;
+    uint32_t decalages[4];
+} Instruction ;
+
+/* déclaration de fonctions */
+char *normalisation(char *line);// permet d'enlever les virgules
+char *rcp_instr(char *line, char *cons); // récupération de l'instruction
+uint32_t identification(char *line); // identification de l'instruction
 void recup_2_arg(char *line, char *rd, char *imm); // recupere deux arguments
-void recup_3_arg(char *line, char *rd, char *rs1,char *rs2); // récupère trois arguments
-void trtmt_rgstr(char *registre); // permet de traiter les deux noms de chaque registre
-
-
-// ces procédure reçoivent une ligne de code correpondant à la bonne procédure ( exemple : "add" sera traité par e_add)
-// procédure nécessitant trois registres
-void e_add(char *line);
-void e_sub(char *line);
-void e_addi(char *line);
-void e_beq(char *line);
-void e_bne(char *line);
-void e_blt(char *line);
-void e_bge(char *line);
-
-// procédure nécessitant deux registres
-void e_ld(char *line);
-void e_sd(char *line);
-void e_jal(char *line);
-void e_li(char *line);
-void e_mv(char *line);
-
-// procédure nécessitant un registre ( un offset)
-void e_j(char *line);
+void recup_3_arg(char *line,char tab[2][10]);// récupère trois arguments
+void ecriture(char nomFichier[], char *donnee) ;
+int find_index_char(char *tab, char instr, int index);
+int find_index_string(char tab[32][5], char *instr) ;
+int normalisation_rgstr(char *tab);
+uint32_t assemble(Instruction a);

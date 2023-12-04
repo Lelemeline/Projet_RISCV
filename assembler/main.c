@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "utils.h"
 
 int main(int argc, char **argv)
@@ -19,7 +20,7 @@ int main(int argc, char **argv)
     FILE *fe ; // fe = fichier d'entrée
     FILE *fs ; // fs = fichier de sortie
     fe = fopen(asm_input_file,"r");
-    fs = fopen(hex_output_file,"w");
+    fs = fopen(hex_output_file,"w+");
 
     /* déclaration de variables*/
 
@@ -30,17 +31,17 @@ int main(int argc, char **argv)
 
     /*programme*/
     while((line_size = getline(&buffer,&buf_size,fe))!=end_buf){ // lit le fichier ligne à ligne
-        normalisation(buffer);
-        identification(buffer);
+        buffer = normalisation(buffer);
         fprintf(fs,"%s",buffer);
+        printf("%d",identification(buffer));
     }
-
     fprintf(fs,"\n");
+    free(buffer);
 
     // pour l'instant on  1. normalise les lignes 2. on les identifie
 
     /*libération de mémoire dynamique*/
-    free(buffer);
+
 
     /*fermeture des fichiers d'entrée et de sortie*/
     fclose(fe);
