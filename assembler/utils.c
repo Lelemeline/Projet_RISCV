@@ -47,6 +47,16 @@ int find_index_string(char tab[32][5], char *instr) {
     }
     return -1;
 }
+
+int conversion(char *tab){
+    int i=0;
+    int nombre;
+    while(tab[i]!='\0'){
+        nombre+=tab[i]*10**i;
+    }
+    return nombre;
+}
+
 int find_type(int x){
      if(0<=x && x<2) return 0 ;
      if (2<=x && x<4) return 1;
