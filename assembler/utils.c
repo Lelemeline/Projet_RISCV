@@ -16,6 +16,8 @@ char *normalisation(char *line){
     while (line[i]!='\0'){ // tant qu'une ligne de code n'est pas vide
         if (line[i]==','){
             line[i]=' ';
+         if (line[i]>='A' && line[i]<='Z')
+            line[i]-='A'-'a';
         }
         i++;
     }
@@ -30,6 +32,7 @@ char *rcp_instr(char *line, char *cons) {
     return original_dest;
 }
 int find_index_char(char *tab, char instr, int index) {
+
     if (*tab == instr) return index;
     if (*tab == '\0') return -1;
     return find_index_char(tab + 1, instr, index + 1);
@@ -42,6 +45,16 @@ int find_index_string(char tab[32][5], char *instr) {
     }
     return -2;
 }
+
+// int conversion(char *tab){ //prend en argument un tableau de caractères et renvoie l'int correspondant
+//     int i=0;
+//     int nombre;
+//     while(tab[i]!='\0'){
+//         nombre+=tab[i]*10**i;
+//     }
+//     return nombre;
+// }
+
 int find_type(int x){
      if(0<=x && x<2) return 0 ;
      if (2<=x && x<4) return 1;
