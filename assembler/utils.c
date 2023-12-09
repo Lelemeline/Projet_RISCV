@@ -1,4 +1,5 @@
 #include "utils.h"
+
 char instruction[13][5] = {"add","sub","addi","ld","sd","beq","bne","blt","bge","jal"} ;
 char registre[32][5] = {"zero","ra","sp","gp","tp","t0","t1","t2","s0","s1","a0","a1","a2","a3","a4","a5","a6","a7","s2","s3","s4","s5","s6","s7","s8","s9","s10","s11","t3","t4","t5","t6"} ;
 char type_instr[5] = {'R','I','S','B','J'};
@@ -7,36 +8,49 @@ int  nbre_rgstr[5] = {3,3,4,4,2};
 uint32_t opcode[5] = {51,3,12323,99,111};
 
 
+/// @brief remplace virgule par espace; les lignes vides et commentaires; change toutes les maj en min
+/// @param line la ligne d'instruction complète
+/// @return line - la ligne d'instruction normalisée
 char *normalisation(char *line){
     int i=0;
-    if (line[0]=='#' || line[0]=='\n'){ // on détecte les commentaire et les lignes vides : on les dégage
-        line[0]='\0'; // ligne vide
+    if (line[0]=='#' || line[0]=='\n'){ // ici on détecte que le premier char de la ligne est un # ou '\0' (<=> ligne vide)
+        line[0]='\0'; // on remplace alors par une ligne vide
         return line;
     }
-    while (line[i]!='\0'){ // tant qu'une ligne de code n'est pas vide
-        if (line[i]==','){
-            line[i]=' ';
-         if (line[i]>='A' && line[i]<='Z')
-            line[i]+='a';
-        }
+    while (line[i]!='\0'){ //
+        if (line[i]==',') line[i]=' ';
+        if(isalpha(line[i]) && isupper(line[i])) line[i] += 32;
         i++;
     }
     return line;
 }
-char *rcp_instr(char *line, char *cons) {
-    char *original_dest = cons;
-    while (*line != ' ') {
+//-----------------------------------------------//
+// dans les fonctions suivantes, on considère que la ligne est conforme au format que l'on attend. La gestion d'erreur n'est pas présente.//
+
+/// @brief l'instruction est contenue du premier caractère de la ligne à l'espace suivant : c'est cette séquence de caractères qui est copiée dans le pointeur vers char cons.
+/// @param line
+/// @param cons
+void rcp_instr(char *line, char *cons) {
+    while (*line != ' ') { //
         *cons++ = *line++;
     }
     *cons++ = '\0';
-    return original_dest;
 }
-int find_index_char(char *tab, char instr, int index) {
 
+/// @brief retourne l'index de instr dans le tableau tab (fonction récursive)
+/// @param tab
+/// @param instr
+/// @param index
+/// @return
+int find_index_char(char *tab, char instr, int index) {
     if (*tab == instr) return index;
     if (*tab == '\0') return -1;
     return find_index_char(tab + 1, instr, index + 1);
 }
+/// @brief retourne l'index du pointeur vers char instr dans le tableau de string tab
+/// @param tab
+/// @param instr
+/// @return
 int find_index_string(char tab[32][5], char *instr) {
     for (int i = 0; i < 32; i++) {
         if (strcmp(tab[i], instr) == 0) {
@@ -45,7 +59,9 @@ int find_index_string(char tab[32][5], char *instr) {
     }
     return -2;
 }
-
+/// @brief est utilisé pour déterminer le format de l'instruction : prend l'indice de l'instruction dans le tableau instruction et renvoie le format correspondant (l'index correspondant dans la var global type-instr)
+/// @param x
+/// @return int
 int find_type(int x){
      if(0<=x && x<2) return 0 ;
      if (2<=x && x<4) return 1;
@@ -54,23 +70,17 @@ int find_type(int x){
      if (x==9) return 4;
      return -1;
 }
+/// @brief Il existe deux types de registre : xX (dans ce cas, on récupère X-un int) et ceux avec des noms. Rangés dans un tableau "registre" à la place correspondant à l'index du registre.
+/// @param tab
+/// @return
 int normalisation_rgstr(char *tab) {
     if (tab[0] == 'x') return atoi(tab+1);
     else return find_index_string(registre, tab);
 }
-void affichage_instr( Instruction a){
-    printf("----------------------\n");
-    printf("opcode :%i\n",a.opcode);
-    for (int i=0;i<nbre_rgstr[a.format];i++){
-        printf("registre %i : %i\n",i,a.registres[i]);
-    }
-    for (int i = 0; i < 4; i++)
-    {
-        printf("décalage %i : %i\n",i,a.decalages[i]);
-    }
-    printf("----------------------\n");
-
-}
+/// @brief on prend la ligne d'instruction complète, on passe l'instruction ("mv","addi"...) et un espace, puis on récupère les arguments nécessaires (jamais plus de 3), qu'on copie dans le tableau tab.
+/// @param a
+/// @param line
+/// @param tab
 void recup_arg(int a, char *line,char tab[2][10]) {
     while (*line != ' ') {
         line++;
@@ -93,12 +103,18 @@ void recup_arg(int a, char *line,char tab[2][10]) {
         }
     }
 }
+/// @brief concatène deux chaînes de caractères st1 et st2 dans la chaîne de caractère line
+/// @param line
+/// @param st1
+/// @param st2
 void concatener(char *line, const char *st1, const char *st2) {
     while ((*st1 != '\0')) {*line++ = *st1++;}
     while ((*st2 != '\0')) {*line++ = *st2++;}
     *line = '\0';
 }
-
+/// @brief ajoute à l'a.opcode chacun des a.registres décalé de a.décalages
+/// @param a
+/// @return uint32_t le code assemblé
 uint32_t assemble(Instruction a){
      uint32_t code = a.opcode;
      int j = nbre_rgstr[a.format];
@@ -107,16 +123,21 @@ uint32_t assemble(Instruction a){
      }
      return code;
 }
-
+/// @brief identifie l'instruction puis disjonction de cas : si c'est une pseudo instruction, on la reconnaît ainsi que ses registres,
+/// et on renvoie l'identification de l'instruction de base correspondante (déjà normalisée donc).
+/// dans le cas où c'est une des dix instructions de base, on identifie le format et on "remplit" la structure qui correspond.
+/// Une fois que la structure est complète, on assemble l'instruction.
+/// @param line
+/// @return
 uint32_t identification(char *line){
     char *cons = malloc(strlen (line)+1); // allocation de mémoire dynamique
     rcp_instr(line,cons);
     uint32_t code_assemble;
     if (strcmp(cons,"j")==0){
-        char offset[2][10] ;
+        char offset[1][10] ;
         recup_arg(1,line,offset);
         char *ist = malloc(sizeof(line));
-        concatener(ist,"jal x0 ",offset[0]);
+        concatener(ist,"jal x0  ",offset[0]);
         return identification(ist);
     }
     else if (strcmp(cons,"li")==0){
@@ -136,12 +157,11 @@ uint32_t identification(char *line){
         concatener(ist,ist,"  ");
         concatener(ist,ist,rgst[1]);
         concatener(ist,ist," 0");
-        uint32_t o = identification(ist);
-        return o;
+        return identification(ist);
     }
     else{
         Instruction L ;
-        L.format = find_type(find_index_string(instruction,cons));
+        L.format = find_type(find_index_string(instruction,cons)); // trouve l'index de l'instruction dans le tableau "instruction" et renvoie l'index du format correspondant
         memcpy(L.decalages, decalage[find_index_char(type_instr, type_instr[L.format], 0)], sizeof(L.decalages));
         L.opcode=opcode[find_index_char(type_instr, type_instr[L.format], 0)];
         int nbr_rgstr = nbre_rgstr[L.format];
@@ -180,9 +200,24 @@ uint32_t identification(char *line){
                 break;
             default: printf("ERROR\n");break;
         }
-        affichage_instr(L);
         code_assemble = assemble(L);
     }
     free(cons); // libération de mémoire
     return code_assemble;
+}
+/// @brief fonction d'affichage de la structure : utilisée pour le déboggage
+/// @param a
+void affichage_instr( Instruction a){
+    printf("----------------------\n");
+    printf("Format: %i\n",a.format);
+    printf("opcode :%i\n",a.opcode);
+    for (int i=0;i<nbre_rgstr[a.format];i++){
+        printf("registre %i : %i\n",i,a.registres[i]);
+    }
+    for (int i = 0; i <4; i++)
+    {
+        printf("décalage %i : %i\n",i,a.decalages[i]);
+    }
+    printf("----------------------\n");
+
 }

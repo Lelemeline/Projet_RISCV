@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <ctype.h>
 
 typedef struct{
     int format ;
@@ -14,7 +15,7 @@ typedef struct{
 
 /* déclaration de fonctions */
 char *normalisation(char *line);// permet d'enlever les virgules
-char *rcp_instr(char *line, char *cons); // récupération de l'instruction
+void rcp_instr(char *line, char *cons); // récupération de l'instruction
 uint32_t identification(char *line); // identification de l'instruction
 void recup_arg(int a, char *line,char tab[2][10]);// récupère trois arguments
 void concatener(char *line, const char *st1, const char *st2);

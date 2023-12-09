@@ -30,12 +30,11 @@ int main(int argc, char **argv)
 
     /*programme*/
 
-    while((line_size = getline(&buffer,&buf_size,fe))!=-1){ // lit le fichier ligne à ligne
+    while((line_size = getline(&buffer,&buf_size,fe))!=-1){ // lit le fichier ligne à ligne (-1<=> fin de fichier)
         buffer = normalisation(buffer);
         if (buffer[0]!='\0'){
             fprintf(fs,"%08x\n",identification(buffer));
         }
-
     }
     free(buffer);
 
