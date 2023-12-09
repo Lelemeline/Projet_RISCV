@@ -28,3 +28,10 @@ label_ge:
     # Code à exécuter si x4 est supérieur ou égal à x3
     li x7,8
 
+#EXPECTED
+#
+
+
+
+#DEBUGAGE EN FONCTION DES VALEURS DES REGISTRES
+#
