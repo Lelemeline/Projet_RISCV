@@ -32,7 +32,7 @@ li  x30, 30
 li  x31, 31
 
 # EXPECTED
-# sp: 16384
+
 # ra:1
 # sp:2
 # gp:3
