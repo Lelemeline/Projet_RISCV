@@ -6,8 +6,9 @@
 #include <stdint.h>
 
 typedef struct{
+    int format ;
     uint32_t opcode  ;
-    uint32_t registres[3] ;
+    uint32_t registres[4] ;
     uint32_t decalages[4];
 } Instruction ;
 

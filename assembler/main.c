@@ -33,9 +33,7 @@ int main(int argc, char **argv)
     while((line_size = getline(&buffer,&buf_size,fe))!=-1){ // lit le fichier ligne à ligne
         buffer = normalisation(buffer);
         if (buffer[0]!='\0'){
-            //fprintf(fs,"%s",buffer);
-            //printf("%s",buffer);
-            fprintf(fs,"%x\n",identification(buffer));
+            fprintf(fs,"%08x\n",identification(buffer));
         }
 
     }
