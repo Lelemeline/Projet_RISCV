@@ -8,7 +8,15 @@ int  decalage[5][4] = {{7,15,20},{7,15,20},{7,15,20,25},{7,15,20,25},{7,12}};
 int  nbre_rgstr[5] = {3,3,4,4,2};
 uint32_t opcode[5] = {51,3,12323,99,111};
 
-
+/// @brief concatène deux chaînes de caractères st1 et st2 dans la chaîne de caractère line
+/// @param line
+/// @param st1
+/// @param st2
+void concatener(char *line, const char *st1, const char *st2) {
+    while ((*st1 != '\0')) {*line++ = *st1++;}
+    while ((*st2 != '\0')) {*line++ = *st2++;}
+    *line = '\0';
+}
 /// @brief remplace virgule par espace; les lignes vides et commentaires; change toutes les maj en min
 /// @param line la ligne d'instruction complète
 /// @return line - la ligne d'instruction normalisée
@@ -26,7 +34,7 @@ char *normalisation(char *line){
     return line;
 }
 //-----------------------------------------------//
-// dans les fonctions suivantes, on considère que la ligne est conforme au format que l'on attend. La gestion d'erreur n'est pas présente.//
+// dans les fonctions suivantes, on considère que la ligne est conforme, à savoir pas de virgules ni de majuscules..//
 
 /// @brief l'instruction est contenue du premier caractère de la ligne à l'espace suivant : c'est cette séquence de caractères qui est copiée dans le pointeur vers char cons.
 /// @param line
@@ -96,23 +104,15 @@ void recup_arg(int a, char *line,char tab[2][10]) {
         registre[j] = '\0';
         strcpy(tab[i],registre);
         free(registre);
-        if (*line == ' ') {
-            line+=2;
+        while (*line == ' ') {
+            line++;
         }
         if(*line == '('){
             line++;
         }
     }
 }
-/// @brief concatène deux chaînes de caractères st1 et st2 dans la chaîne de caractère line
-/// @param line
-/// @param st1
-/// @param st2
-void concatener(char *line, const char *st1, const char *st2) {
-    while ((*st1 != '\0')) {*line++ = *st1++;}
-    while ((*st2 != '\0')) {*line++ = *st2++;}
-    *line = '\0';
-}
+
 /// @brief ajoute à l'a.opcode chacun des a.registres décalé de a.décalages
 /// @param a
 /// @return uint32_t le code assemblé
