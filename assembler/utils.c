@@ -8,15 +8,6 @@ int  decalage[5][4] = {{7,15,20},{7,15,20},{7,15,20,25},{7,15,20,25},{7,12}};
 int  nbre_rgstr[5] = {3,3,4,4,2};
 uint32_t opcode[5] = {51,3,12323,99,111};
 
-/// @brief concatène deux chaînes de caractères st1 et st2 dans la chaîne de caractère line
-/// @param line
-/// @param st1
-/// @param st2
-void concatener(char *line, const char *st1, const char *st2) {
-    while ((*st1 != '\0')) {*line++ = *st1++;}
-    while ((*st2 != '\0')) {*line++ = *st2++;}
-    *line = '\0';
-}
 /// @brief remplace virgule par espace; les lignes vides et commentaires; change toutes les maj en min
 /// @param line la ligne d'instruction complète
 /// @return line - la ligne d'instruction normalisée
@@ -29,6 +20,7 @@ char *normalisation(char *line){
     while (line[i]!='\0'){ //
         if (line[i]==',') line[i]=' ';
         if(isalpha(line[i]) && isupper(line[i])) line[i] += 32;
+        if(line[i]=='#') line[i] = '\0';
         i++;
     }
     return line;
@@ -44,6 +36,15 @@ void rcp_instr(char *line, char *cons) {
         *cons++ = *line++;
     }
     *cons++ = '\0';
+}
+/// @brief concatène deux chaînes de caractères st1 et st2 dans la chaîne de caractère line
+/// @param line
+/// @param st1
+/// @param st2
+void concatener(char *line, const char *st1, const char *st2) {
+    while ((*st1 != '\0')) {*line++ = *st1++;}
+    while ((*st2 != '\0')) {*line++ = *st2++;}
+    *line = '\0';
 }
 
 /// @brief retourne l'index de instr dans le tableau tab (fonction récursive)
@@ -91,10 +92,12 @@ int normalisation_rgstr(char *tab) {
 /// @param line
 /// @param tab
 void recup_arg(int a, char *line,char tab[2][10]) {
-    while (*line != ' ') {
+    while (*line != ' ') { // on passe le char cons (l'instruction)
         line++;
     }
-    line++;
+    while(*line==' '){ // on évite la casse, on ne sait pas combien l'utilisateur a rajouté d'espaces
+        line++;
+    }
     for (int i = 0; i < a; i++) {
         char *registre = malloc(10);
         int j = 0;
@@ -124,6 +127,22 @@ uint32_t assemble(Instruction a){
      }
      return code;
 }
+/// @brief fonction d'affichage de la structure : utilisée pour le déboggage
+/// @param a
+void affichage_instr( Instruction a){
+    printf("----------------------\n");
+    printf("Format: %i\n",a.format);
+    printf("opcode :%i\n",a.opcode);
+    for (int i=0;i<nbre_rgstr[a.format];i++){
+        printf("registre %i : %i\n",i,a.registres[i]);
+    }
+    for (int i = 0; i <4; i++)
+    {
+        printf("décalage %i : %i\n",i,a.decalages[i]);
+    }
+    printf("----------------------\n");
+
+}
 /// @brief identifie l'instruction puis disjonction de cas : si c'est une pseudo instruction, on la reconnaît ainsi que ses registres,
 /// et on renvoie l'identification de l'instruction de base correspondante (déjà normalisée donc).
 /// dans le cas où c'est une des dix instructions de base, on identifie le format et on "remplit" la structure qui correspond.
@@ -144,9 +163,9 @@ uint32_t identification(char *line){
     else if (strcmp(cons,"li")==0){
         char  rgst[2][10];
         recup_arg(2,line,rgst);
-        char *ist = malloc(sizeof(line));
+        char *ist = malloc(2*sizeof(line));
         concatener(ist,"addi ",rgst[0]);
-        concatener(ist,ist,"  zero  ");
+        concatener(ist,ist," zero ");
         concatener(ist,ist,rgst[1]);
         return identification(ist);
     }
@@ -175,10 +194,18 @@ uint32_t identification(char *line){
                 for(int i = 0;i<3;i++){L.registres[i]= normalisation_rgstr(registre[i]);}
                 break;
             case 1: // I-type
-                if(strcmp(cons,"addi")==0) L.opcode += 16;
-                else L.opcode +=(3<<12);
-                for(int i = 0;i<2;i++){L.registres[i]= normalisation_rgstr(registre[i]);}
-                L.registres[2] = atol(registre[2]);
+                if(strcmp(cons,"addi")==0) {
+                    L.opcode += 16;
+                    for(int i = 0;i<2;i++){L.registres[i]= normalisation_rgstr(registre[i]);
+                    L.registres[2] = atol(registre[2]);
+                    }
+                }
+                else {
+                    L.opcode +=(3<<12);
+                    L.registres[0] = normalisation_rgstr(registre[0]);
+                    L.registres[1] = normalisation_rgstr(registre[2]);
+                    L.registres[2] = atol(registre[1]);
+                    }
                 break;
             case 2: // S-type
                 L.registres[0] = (atol(registre[1]) & 31) ;
@@ -201,24 +228,9 @@ uint32_t identification(char *line){
                 break;
             default: printf("ERROR\n");break;
         }
+        affichage_instr(L);
         code_assemble = assemble(L);
     }
     free(cons); // libération de mémoire
     return code_assemble;
-}
-/// @brief fonction d'affichage de la structure : utilisée pour le déboggage
-/// @param a
-void affichage_instr( Instruction a){
-    printf("----------------------\n");
-    printf("Format: %i\n",a.format);
-    printf("opcode :%i\n",a.opcode);
-    for (int i=0;i<nbre_rgstr[a.format];i++){
-        printf("registre %i : %i\n",i,a.registres[i]);
-    }
-    for (int i = 0; i <4; i++)
-    {
-        printf("décalage %i : %i\n",i,a.decalages[i]);
-    }
-    printf("----------------------\n");
-
 }

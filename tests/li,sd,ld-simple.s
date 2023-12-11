@@ -1,4 +1,4 @@
-ld  x1, 4(x0)
+ld  x1, 4(x0) #commentaire dont on se fout
 sd  t0, 3(t0)
 ld  t1, 6(x0)
 
