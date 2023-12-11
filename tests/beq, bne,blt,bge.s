@@ -1,4 +1,4 @@
-.text
+
     # Initialisation des valeurs dans les registres
     li  x1, 10
     li  x2, 20
