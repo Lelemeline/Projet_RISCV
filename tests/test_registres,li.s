@@ -1,7 +1,7 @@
 # Initialisation des valeurs dans tous les registres
-li  x1, 1
-li  x2, 2
-li  x3, 3
+li x1, 1
+li x2, 2
+li x3, 3
 li  x4, 4
 li  x5, 5
 li  x6, 6
