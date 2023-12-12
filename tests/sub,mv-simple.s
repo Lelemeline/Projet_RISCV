@@ -1,6 +1,7 @@
-addi a1, zero,  20
-addi a2,zero, 22
-add a0, a1, a2
+aDDi x11, x0, 20
+ADDI a2, zero, 22
+SUB a0, a2, a1
+
 
 # EXPECTED
 # sp: 16384
