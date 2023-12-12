@@ -28,10 +28,14 @@ char *normalisation(char *line){
 //-----------------------------------------------//
 // dans les fonctions suivantes, on considère que la ligne est conforme, à savoir pas de virgules ni de majuscules..//
 
+
 /// @brief l'instruction est contenue du premier caractère de la ligne à l'espace suivant : c'est cette séquence de caractères qui est copiée dans le pointeur vers char cons.
 /// @param line
 /// @param cons
 void rcp_instr(char *line, char *cons) {
+    while(*line == ' '){
+        line++;
+    }
     while (*line != ' ') { //
         *cons++ = *line++;
     }
@@ -92,6 +96,9 @@ int normalisation_rgstr(char *tab) {
 /// @param line
 /// @param tab
 void recup_arg(int a, char *line,char tab[2][10]) {
+    while(*line==' '){ // évite la casse (si la ligne commence par un espace par exemple)
+        line++;
+    }
     while (*line != ' ') { // on passe le char cons (l'instruction)
         line++;
     }
@@ -152,12 +159,13 @@ void affichage_instr( Instruction a){
 uint32_t identification(char *line){
     char *cons = malloc(strlen (line)+1); // allocation de mémoire dynamique
     rcp_instr(line,cons);
+    printf("%s\n",cons);
     uint32_t code_assemble;
     if (strcmp(cons,"j")==0){
         char offset[1][10] ;
         recup_arg(1,line,offset);
         char *ist = malloc(sizeof(line));
-        concatener(ist,"jal x0  ",offset[0]);
+        concatener(ist,"jal x0 ",offset[0]);
         return identification(ist);
     }
     else if (strcmp(cons,"li")==0){
@@ -187,6 +195,7 @@ uint32_t identification(char *line){
         int nbr_rgstr = nbre_rgstr[L.format];
         char registre[nbr_rgstr][10];
         recup_arg(nbr_rgstr ,line,registre);
+        printf("%s\n%s\n",registre[0],registre[1]);
         switch (L.format)
         {
             case 0: // R-type
