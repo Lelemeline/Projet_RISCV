@@ -39,7 +39,12 @@ On reconnaît ensuite dans la fonction principale le format grâce à un switch,
 * Comment avez-vous procédé pour écrire les tests ? Étes-vous confiant·e·s que
 toutes les instructions gérées et tous les types d'arguments sont couverts ?
 
-[COMPLÉTER ICI]
+Les tests ont été écrits de manière à ce que s'ils sont mal interprétés par le programme, l'erreur soit facilement identifiable. Pour ce faire, les tests ont chacun des objectifs différents :
+  - Deux tests ont été réalisés pour vérifier que les deux noms de registres sont reconnus.
+  - Ensuite, dans les tests "simples" d'une instruction, des espaces, des majuscules ainsi que des commentaires (à la fin d'une ligne ou sur une ligne entière)      ont  été ajoutés pour vérifier que le programme récupère correctement les instructions.
+  - Enfin, d'autres fichiers de test ont été créés pour tester le bon fonctionnement de chaque instruction.
+
+Nous sommes assez confiants quant à la gestion de toutes les instructions et arguments demandés. Néanmoins, on attend l'élaboration de l'émulateur pour vérifier le bon fonctionnement de certaines instructions, certains tests ont quand même déjà été pensés pour pouvoir identifier certains problèmes.
 
 * Quelle a été votre expérience avec l'utilisation et la compréhension de la
 documentation fournie sur l'encodage des instructions RISC-V ?
