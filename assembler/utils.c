@@ -159,7 +159,6 @@ void affichage_instr( Instruction a){
 uint32_t identification(char *line){
     char *cons = malloc(strlen (line)+1); // allocation de mémoire dynamique
     rcp_instr(line,cons);
-    printf("%s\n",cons);
     uint32_t code_assemble;
     if (strcmp(cons,"j")==0){
         char offset[1][10] ;
@@ -195,7 +194,6 @@ uint32_t identification(char *line){
         int nbr_rgstr = nbre_rgstr[L.format];
         char registre[nbr_rgstr][10];
         recup_arg(nbr_rgstr ,line,registre);
-        printf("%s\n%s\n",registre[0],registre[1]);
         switch (L.format)
         {
             case 0: // R-type
@@ -233,11 +231,13 @@ uint32_t identification(char *line){
                 break;
             case 4: // J-type
                 L.registres[0] = normalisation_rgstr(registre[0]) ;
-                L.registres[1] = (atol(registre[1]) & 1048576) + ((atol(registre[1]) & 2046)<<8 ) + ((atol(registre[1]) & 2048)>>2) + ((atol(registre[1]) & 1040382)>>12);
+                uint32_t reg = atol(registre[1]);
+                L.registres[1] = ((reg & 1048576)>>1) + ((reg & 2046)<<8 ) + ((reg & 2048)>>3) + ((reg & 1044480)>>12);
+                affichage_instr(L);
                 break;
             default: printf("ERROR\n");break;
         }
-        affichage_instr(L);
+
         code_assemble = assemble(L);
     }
     free(cons); // libération de mémoire

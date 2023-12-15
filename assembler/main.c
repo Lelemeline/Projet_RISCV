@@ -27,14 +27,14 @@ int main(int argc, char **argv)
     char *buffer = NULL; // buffer = contient chacune des lignes dans son ensemble
     size_t buf_size;
     int line_size;
-
+    printf("mon int %i\n",(15+(15<<4)+(11<<8)+(15<<12)+(15<<16))<<11);
     /*programme*/
-
     while((line_size = getline(&buffer,&buf_size,fe))!=-1){ // lit le fichier ligne à ligne (-1<=> fin de fichier)
         buffer = normalisation(buffer);
         if (buffer[0]!='\0'){
             fprintf(fs,"%08x\n",identification(buffer));
         }
+
     }
     free(buffer);
 
