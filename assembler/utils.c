@@ -227,7 +227,7 @@ uint32_t identification(char *line){
                 L.registres[0] = (atol(registre[2]) & 30) + ((atol(registre[2]) & 2048)>>11);
                 L.registres[1] = normalisation_rgstr(registre[0]) ;
                 L.registres[2] = normalisation_rgstr(registre[1]) ;
-                L.registres[3] = ((atol(registre[2]) & 4096)>>1) +((atol(registre[2]) & 2018)>>5);
+                L.registres[3] = ((atol(registre[2]) & 4096)>>6) +((atol(registre[2]) & 2018)>>5);
                 break;
             case 4: // J-type
                 L.registres[0] = normalisation_rgstr(registre[0]) ;
