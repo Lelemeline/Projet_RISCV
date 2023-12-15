@@ -6,6 +6,9 @@
     li x1,1
     li x2,2
 
+    jal x0,-12000 #pour tester des grosses valeurs
+    jal x0,12000
+
 # EXPECTED 
 #x11:20
 #x1:1
