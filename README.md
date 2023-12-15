@@ -42,7 +42,7 @@ toutes les instructions gérées et tous les types d'arguments sont couverts ?
 Les tests ont été écrits de manière à détecter le maximum d'erreurs sur le code. Pour ce faire, les tests ont chacun des objectifs différents :
   - Deux tests ont été réalisés pour vérifier que les deux noms de registres sont reconnus.
   - Ensuite, dans les tests "simples" d'une instruction, des espaces, des majuscules ainsi que des commentaires (à la fin d'une ligne ou sur une ligne entière)      ont  été ajoutés pour vérifier que le programme récupère correctement les instructions.
-  - Enfin, d'autres fichiers de test ont été créés pour tester le bon fonctionnement de chaque instruction.
+  - Enfin, d'autres fichiers de test ont été créés pour tester le bon fonctionnement de chaque instruction peu importe les valeurs utilisées (test de valeurs négatives ou de grandes valeurs).
 
 Nous sommes assez confiants quant à la gestion de toutes les instructions et arguments demandés.
 
