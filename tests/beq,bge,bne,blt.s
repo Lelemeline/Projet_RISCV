@@ -5,6 +5,7 @@ li  x2, 20
 li  x3, 10
 li  x4, 5
 
+
 # Comparaison pour tester les instructions de branchement
 beq x1, x3, 8   # Sautera une instruction si x1 est égal à x3
 addi x5, x0, 1  # instruction sautée si l'instruction si dessus est vrai
@@ -21,11 +22,19 @@ beq x1, x2, 4
 addi x9, x0, 1
 bne x1, x3, 4
 addi x10, x0, 2
-blt x2, x1, -4004
+blt x2, x1, 4
 addi x11, x0, 3
 bge x4, x3, 4
 addi x12, x0, 4
 
+beq x1,x13,-4096
+bne x2,x4,-4096
+blt x1,x2,-4096
+bge x3,x4,-4096
+beq x1,x13,4094
+bne x2,x4,4094
+blt x1,x2,4094
+bge x3,x4,4094
 
 # EXPECTED
 # x1 :10
