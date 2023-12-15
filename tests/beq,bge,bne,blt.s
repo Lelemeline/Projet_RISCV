@@ -7,7 +7,7 @@ li  x4, 5
 
 # Comparaison pour tester les instructions de branchement
 beq x1, x3, 8   # Sautera une instruction si x1 est égal à x3
-addi x5, x0, 1  # instruction sauté si l'instruction si dessus est vrai
+addi x5, x0, 1  # instruction sautée si l'instruction si dessus est vrai
 bne x2, x4, 8   # Sautera une instruction si x2 n'est pas égal à x4
 addi x6, x0, 2  # sautée si bne est vrai
 blt x1, x2, 8   # Sautera une instruction si x1 est inférieur à x2
@@ -16,7 +16,7 @@ bge x3, x4, 8  # Sautera une instruction si x3 est supérieur ou égal à x4
 addi x8, x0, 4  # sautée si bge est vrai
 
 # test pour si les conditions pour les instructions ne sont pas vérifiés
-#debeugage qui ne peut être fait qu'en ayant les valeurs des registres
+# debeugage qui ne peut être fait qu'en ayant les valeurs des registres
 beq x1, x2, 4
 addi x9, x0, 1
 bne x1, x3, 4
