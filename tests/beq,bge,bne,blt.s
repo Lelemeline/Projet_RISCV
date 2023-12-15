@@ -21,7 +21,7 @@ beq x1, x2, 4
 addi x9, x0, 1
 bne x1, x3, 4
 addi x10, x0, 2
-blt x2, x1, 4
+blt x2, x1, -4004
 addi x11, x0, 3
 bge x4, x3, 4
 addi x12, x0, 4
