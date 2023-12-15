@@ -233,11 +233,9 @@ uint32_t identification(char *line){
                 L.registres[0] = normalisation_rgstr(registre[0]) ;
                 uint32_t reg = atol(registre[1]);
                 L.registres[1] = ((reg & 1048576)>>1) + ((reg & 2046)<<8 ) + ((reg & 2048)>>3) + ((reg & 1044480)>>12);
-                affichage_instr(L);
                 break;
             default: printf("ERROR\n");break;
         }
-
         code_assemble = assemble(L);
     }
     free(cons); // libération de mémoire
