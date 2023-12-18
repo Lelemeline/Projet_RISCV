@@ -11,8 +11,6 @@ Auteurs : THOMAS KILLIAN et TAVIER LÉA
 
 
 ## Rendu 2
-```Date de rendue: 15/12 23h59 (comme indiqué sur Chamillo)```
-# commande pour test facile : make && ./riscv-assembler tests/add-simple.s test.hex && cat test.hex
 (Une dizaine de lignes devrait suffire à chaque fois)
 
 * Comment avez-vous choisi de programmer l'analyse de texte (dont la lecture
@@ -41,7 +39,7 @@ toutes les instructions gérées et tous les types d'arguments sont couverts ?
 
 Les tests ont été écrits de manière à détecter le maximum d'erreurs sur le code. Pour ce faire, les tests ont chacun des objectifs différents :
   - Deux tests ont été réalisés pour vérifier que les deux noms de registres sont reconnus.
-  - Ensuite, dans les tests "simples" d'une instruction, des espaces, des majuscules ainsi que des commentaires (à la fin d'une ligne ou sur une ligne entière)      ont  été ajoutés pour vérifier que le programme récupère correctement les instructions.
+  - Ensuite, dans les tests "simples" d'une instruction, des espaces, des majuscules ainsi que des commentaires (à la fin d'une ligne ou sur une ligne entière) ont  été ajoutés pour vérifier que le programme récupère correctement les instructions.
   - Enfin, d'autres fichiers de test ont été créés pour tester le bon fonctionnement de chaque instruction peu importe les valeurs utilisées (test de valeurs négatives ou de grandes valeurs).
 
 Nous sommes assez confiants quant à la gestion de toutes les instructions et arguments demandés.
@@ -58,13 +56,13 @@ Au début, la description semblait obscure, mais peu à peu, en avançant dans l
 
 
 ## Rendu 3
+```Date de rendu 19/01```
 
 Questions à remplir _avant_ de programmer l'émulateur (10 lignes sont conseillées à chaque fois pour bien y réfléchir) :
 
 * Listez tous les éléments matériels auxquels vous pouvez penser dont l'émulateur doit reproduire le comportement, et déduisez-en une liste de toutes les tâches individuelles de l'émulateur.
 
-[COMPLÉTER ICI]
-
+L'émulateur doit reproduire le fonctionnement d'une pile 
 * Quelle fonction de la bibliothèque standard pouvez-vous utiliser pour lire les valeurs listées dans le fichier `.hex` sans vous casser la tête ? (Indice : ces valeurs ont été écrites avec `fprintf()`.)
 
 [COMPLÉTER ICI]
