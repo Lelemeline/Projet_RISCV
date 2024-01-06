@@ -1,8 +1,5 @@
 #include <stdio.h>
-#include "charger.h"
-
-uint32_t memoire[16384] = {0};
-uint32_t *sp = 16384 - 1 ;
+#include "executer.h"
 
 
 int main(int argc, char **argv)
@@ -25,20 +22,40 @@ int main(int argc, char **argv)
     fe = fopen(hex_input_file,"r");
     fs = fopen(emu_output_file,"w+");
 
-    /* déclaration de variables*/
+    /* déclaration et initialisation de variables*/
 
-    char *buffer = NULL; // buffer = contient chacune des lignes dans son ensemble
-    size_t buf_size;
-    int line_size;
-    int i = 0;
+    //uint32_t buffer; // buffer = contient chacune des lignes dans son ensemble
+    //memset(memoire,0,sizeof(memoire)) ; // on intialise la mémoire à zéro// pas besoin fscanf renvoie 0 quand le fichier est fini
+    memset(reg,0,sizeof(reg)) ; // on initialise les registres et PC à 0
+    uint32_t PC = reg[32];
+
     /*programme*/
-    while(fscanf(fe,"%08hhx",buffer)!=0){ // lit le fichier ligne à ligne (-1<=> fin de fichier)
-        /*programme*/
-        printf("%s\n",buffer);
+    // initialisation
+    int i = 0;
+    while(fscanf(fe,"%08x ",&memoire[i])!=EOF){ // lit le fichier ligne à ligne (-1<=> fin de fichier)
+        fprintf(fs,"%08x\n",memoire[i]);
+        i++;
     }
-    //  for (int i =0;i<10;i++){printf("%s\n",buffer);}
+    // boucle lecture-décodage-exécution
+    int j=0;
+    while(memoire[j]!=0){
+        decode(memoire[j]);
+        j++;
+        //execution
+    }
+
+    //ecriture_registre(reg,fs); // écriture des registres dans le fichier .state
+
+    /*retourne les valeurs finales dans le fichier .state*/
+    // Memoire mem ;
+    // mem.reg = {0};
+    // mem.reg[1] = 16384 ;
+    // int i=0 ;
+    // while (i!=0){
+    //     fprintf(fs,"%s = %i",registre[i],mem.reg[i]);
+    //     i++;
+    // }
     /*libération de mémoire dynamique*/
-    free(buffer);
 
     /*fermeture des fichiers d'entrée et de sortie*/
     fclose(fe);
