@@ -25,7 +25,6 @@ int main(int argc, char **argv)
     /* déclaration et initialisation de variables*/
     uint32_t reg[33]; // 32 registres + PC
     memset(reg,0,sizeof(reg)) ; // on initialise les registres et PC à 0
-    uint32_t PC = reg[32];
     reg[2] = 16384 ;
 
     /*programme*/

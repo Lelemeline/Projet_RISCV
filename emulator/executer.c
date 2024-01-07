@@ -48,6 +48,7 @@ void afficher_instr(Instruction D){
 void decode(uint32_t line, Instruction *D){
     int index = find_opcode(line);
     switch(index){
+        //R-type
         case 0 :if ((32<<25)==((127<<25)&line)) strcpy(D->instr,"sub") ;
                 else {strcpy(D->instr,"add");}
                 D->rd  = ((31<<7)&line)>>7;
@@ -55,6 +56,7 @@ void decode(uint32_t line, Instruction *D){
                 D->rs2 = ((31<<20)&line)>>20;
                 printf("%s x%i x%i x%i \n",D->instr,D->rd,D->rs1,D->rs2);
                 break ;
+        //I-type
         case 1 :if ((3<<12)==((7<<12)&line)) strcpy(D->instr,"ld") ;
                 else { strcpy(D->instr,"addi") ;}
                 D->rd  =  ((31<<7)&line)>>7;
@@ -62,21 +64,24 @@ void decode(uint32_t line, Instruction *D){
                 D->imm =  ((4095<<20)&line)>>20;
                 printf("%s x%i x%i %i \n",D->instr,D->rd,D->rs1,D->imm);
                 break ;
+        //S-type
         case 2 : strcpy(D->instr,"sd" );
-                D->imm = (((31<<7)&line)>>7) + (((4064<<25)&line)>>25);
+                D->imm = (((31<<7)&line)>>7) + (((255<<20)&line)>>20);
                 D->rs1 = ((31<<15)&line)>>15 ;
                 D->rs2 = ((31<<20)&line)>>20 ;
                 printf("%s x%i x%i %i \n",D->instr,D->rd,D->rs1,D->imm);
                 break ;
+        //B-type
         case 3 :if((1<<12)==((7<<12)&line)) strcpy(D->instr,"bne")                                                         ;
                 else if((4<<12)==((7<<12)&line)) D->instr = "blt" ;
                 else if((5<<12)==((7<<12)&line)) D->instr = "bge";
                 else {D->instr = "beq";}
-                D->imm = (((1<<7)&line)<<4) + (((30<<8)&line)>>7) + (((1<<31)&line)>>19) + (((2015<<25)&line)>>20);
+                D->imm = (((1<<7)&line)<<4) + (((31<<8)&line)>>7) + (((1<<31)&line)>>19) + (((127<<25)&line)>>20);
                 D->rs1 = ((31<<15)&line)>>15;
                 D->rs2 = ((31<<20)&line)>>20;
                 printf("%s x%i x%i %i \n",D->instr,D->rs1,D->rs2,D->imm);
                 break ;
+        //J-type
         case 4 :D->instr = "jal" ;
                 D->rd  = ((31<<7)&line)>>7;
                 D->imm = (((1<<31)&line)>>11) + (((1023<<21)&line)>>20) + (((1<<20)&line)>>9) + ((255<<11)&line);
