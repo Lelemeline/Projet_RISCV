@@ -23,11 +23,10 @@ int main(int argc, char **argv)
     fs = fopen(emu_output_file,"w+");
 
     /* déclaration et initialisation de variables*/
-
-    //uint32_t buffer; // buffer = contient chacune des lignes dans son ensemble
-    //memset(memoire,0,sizeof(memoire)) ; // on intialise la mémoire à zéro// pas besoin fscanf renvoie 0 quand le fichier est fini
+    uint32_t reg[33]; // 32 registres + PC
     memset(reg,0,sizeof(reg)) ; // on initialise les registres et PC à 0
     uint32_t PC = reg[32];
+    reg[2] = 16384 ;
 
     /*programme*/
     // initialisation
@@ -38,24 +37,16 @@ int main(int argc, char **argv)
     }
     // boucle lecture-décodage-exécution
     int j=0;
-    while(memoire[j]!=0){
-        decode(memoire[j]);
-        j++;
+    while(memoire[reg[32]]!=0) {
+        Instruction D;
+        D.instr = malloc(5*sizeof(char));
+        decode(memoire[reg[32]],&D);
         //execution
+        executer(D,reg);
+        j++;
     }
 
-    //ecriture_registre(reg,fs); // écriture des registres dans le fichier .state
-
-    /*retourne les valeurs finales dans le fichier .state*/
-    // Memoire mem ;
-    // mem.reg = {0};
-    // mem.reg[1] = 16384 ;
-    // int i=0 ;
-    // while (i!=0){
-    //     fprintf(fs,"%s = %i",registre[i],mem.reg[i]);
-    //     i++;
-    // }
-    /*libération de mémoire dynamique*/
+    ecriture_registre(reg,fs); // écriture des registres dans le fichier .state
 
     /*fermeture des fichiers d'entrée et de sortie*/
     fclose(fe);
