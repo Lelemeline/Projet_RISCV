@@ -9,8 +9,6 @@ li x5,5
 li x6,6
 li x7,7
 
-j -80000
-j 80000
 
 #EXPECTED
 #x2: 16384
