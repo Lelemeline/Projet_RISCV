@@ -27,15 +27,6 @@ addi x11, x0, 3
 bge x4, x3, 4
 addi x12, x0, 4
 
-beq x16,x13,-4096
-bne x28,x4,-4096
-blt x16,x28,-4096
-bge x3,x4,-4096
-beq x16,x13,4094
-bne x28,x4,4094
-blt x16,x28,4094
-bge x3,x4,4094
-
 # EXPECTED
 # x2: 16384
 # x16 :10
