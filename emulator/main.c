@@ -31,7 +31,6 @@ int main(int argc, char **argv)
     // initialisation
     int i = 0;
     while(fscanf(fe,"%08x ",&memoire[i])!=EOF){ // lit le fichier ligne à ligne (-1<=> fin de fichier)
-        fprintf(fs,"%08x\n",memoire[i]);
         i++;
     }
     // boucle lecture-décodage-exécution
@@ -40,7 +39,6 @@ int main(int argc, char **argv)
         Instruction D;
         D.instr = malloc(5*sizeof(char));
         decode(memoire[reg[32]],&D);
-        //execution
         executer(D,reg);
         j++;
     }

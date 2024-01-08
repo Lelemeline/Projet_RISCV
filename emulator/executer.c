@@ -14,8 +14,7 @@ void lecture(uint32_t *memoire){
 void ecriture_registre(uint32_t *reg,FILE *file){
     int i=0;
     while(i!=32){
-        fprintf(file,"x%d = %d\n",i,reg[i]);
-        printf("x%d = %d\n",i,reg[i]);
+        fprintf(file,"x%d : %d\n",i,reg[i]);
         i++;
     }
 }
@@ -54,22 +53,22 @@ void decode(uint32_t line, Instruction *D){
                 D->rd  = ((31<<7)&line)>>7;
                 D->rs1 = ((31<<15)&line)>>15 ;
                 D->rs2 = ((31<<20)&line)>>20;
-                printf("%s x%i x%i x%i \n",D->instr,D->rd,D->rs1,D->rs2);
+                //printf("%s x%i x%i x%i \n",D->instr,D->rd,D->rs1,D->rs2);
                 break ;
         //I-type
         case 1 :if ((3<<12)==((7<<12)&line)) strcpy(D->instr,"ld") ;
                 else { strcpy(D->instr,"addi") ;}
                 D->rd  =  ((31<<7)&line)>>7;
                 D->rs1 =  ((31<<15)&line)>>15 ;
-                D->imm =  ((4095<<20)&line)>>20;
-                printf("%s x%i x%i %i \n",D->instr,D->rd,D->rs1,D->imm);
+                D->imm = (((4095<<20)&line)>>20); if((2048&D->imm)==2048) D->imm*=-1;
+                //printf("%s x%i x%i %i \n",D->instr,D->rd,D->rs1,D->imm);
                 break ;
         //S-type
         case 2 : strcpy(D->instr,"sd" );
-                D->imm = (((31<<7)&line)>>7) + (((255<<20)&line)>>20);
+                D->imm = (((31<<7)&line)>>7) + (((255<<20)&line)>>20); if((2048&D->imm)==2048) D->imm*=-1;
                 D->rs1 = ((31<<15)&line)>>15 ;
                 D->rs2 = ((31<<20)&line)>>20 ;
-                printf("%s x%i x%i %i \n",D->instr,D->rd,D->rs1,D->imm);
+                //printf("%s x%i x%i %i \n",D->instr,D->rd,D->rs1,D->imm);
                 break ;
         //B-type
         case 3 :if((1<<12)==((7<<12)&line)) strcpy(D->instr,"bne")                                                         ;
@@ -77,15 +76,17 @@ void decode(uint32_t line, Instruction *D){
                 else if((5<<12)==((7<<12)&line)) D->instr = "bge";
                 else {D->instr = "beq";}
                 D->imm = (((1<<7)&line)<<4) + (((31<<8)&line)>>7) + (((1<<31)&line)>>19) + (((127<<25)&line)>>20);
+                if((4096&D->imm)==4096) D->imm*=-1;
                 D->rs1 = ((31<<15)&line)>>15;
                 D->rs2 = ((31<<20)&line)>>20;
-                printf("%s x%i x%i %i \n",D->instr,D->rs1,D->rs2,D->imm);
+                //printf("%s x%i x%i %i \n",D->instr,D->rs1,D->rs2,D->imm);
                 break ;
         //J-type
         case 4 :D->instr = "jal" ;
                 D->rd  = ((31<<7)&line)>>7;
                 D->imm = (((1<<31)&line)>>11) + (((1023<<21)&line)>>20) + (((1<<20)&line)>>9) + ((255<<11)&line);
-                printf("%s x%i %i \n",D->instr,D->rd,D->imm);
+                if((1048576&D->imm)==1048576) D->imm*=-1;
+                //printf("%s x%i %i \n",D->instr,D->rd,D->imm);
         break ;
     }
 
@@ -94,7 +95,7 @@ void decode(uint32_t line, Instruction *D){
 void executer(Instruction D, uint32_t reg[33]){
     int instr = find_index_string(instruction,D.instr);
     switch(instr){
-        case 0 : reg[D.rd] = reg[D.rs1] + reg[D.rs2] ; reg[32]+=4; break ; //add
+        case 0 : reg[D.rd] = reg[D.rs1] + reg[D.rs2] ; reg[32]+=1; break ; //add
         case 1 : reg[D.rd] = reg[D.rs1] - reg[D.rs2] ; reg[32]+=1; break ; // sub
         case 2 : reg[D.rd] = reg[D.rs1] + D.imm ; reg[32]+=1;break ; //addi
         case 3 : reg[D.rd] = reg[D.imm+reg[D.rs1]]; reg[32]+=1; break;
