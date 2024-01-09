@@ -33,7 +33,7 @@ char *normalisation(char *line){
 /// @param line
 /// @param cons
 void rcp_instr(char *line, char *cons) {
-    while(*line == ' '){
+    while(*line == ' ' || *line == '\t'){
         line++;
     }
     while (*line != ' ') { //
@@ -55,7 +55,7 @@ void concatener(char *line, const char *st1, const char *st2) {
 /// @param tab
 /// @param instr
 /// @param index
-/// @return
+/// @return int
 int find_index_char(char *tab, char instr, int index) {
     if (*tab == instr) return index;
     if (*tab == '\0') return -1;
@@ -64,7 +64,7 @@ int find_index_char(char *tab, char instr, int index) {
 /// @brief retourne l'index du pointeur vers char instr dans le tableau de string tab
 /// @param tab
 /// @param instr
-/// @return
+/// @return int
 int find_index_string(char tab[32][5], char *instr) {
     for (int i = 0; i < 32; i++) {
         if (strcmp(tab[i], instr) == 0) {
@@ -194,6 +194,7 @@ uint32_t identification(char *line){
         int nbr_rgstr = nbre_rgstr[L.format];
         char registre[nbr_rgstr][10];
         recup_arg(nbr_rgstr ,line,registre);
+        printf("%i\n",L.format);
         switch (L.format)
         {
             case 0: // R-type

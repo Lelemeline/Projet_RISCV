@@ -37,11 +37,6 @@ int main(int argc, char **argv)
     }
     free(buffer);
 
-    // pour l'instant on  1. normalise les lignes 2. on les identifie
-
-    /*libération de mémoire dynamique*/
-
-
     /*fermeture des fichiers d'entrée et de sortie*/
     fclose(fe);
     fclose(fs);
