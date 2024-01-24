@@ -28,23 +28,24 @@ int main(int argc, char **argv)
     reg[2] = 16384 ;
 
     /*programme*/
-    // initialisation
+    // initialisation : lecture et chargement des instructions dans la mémoire
     int i = 0;
     while(fscanf(fe,"%08x ",&memoire[i])!=EOF){ // lit le fichier ligne à ligne (-1<=> fin de fichier)
         i++;
     }
+    //lecture(memoire);
     // boucle lecture-décodage-exécution
-    int j=0;
+    //lecture à l'adresse PC d'une instruction. Par convention, on sort de cette boucle si reg[PC]==0
     while(memoire[reg[32]]!=0) {
         Instruction D;
         D.instr = malloc(5*sizeof(char));
+        init_struct(&D);
         decode(memoire[reg[32]],&D);
         executer(D,reg);
-        j++;
     }
-
+    //printf("sortie de while\n");
     ecriture_registre(reg,fs); // écriture des registres dans le fichier .state
-
+    //printf("écriture registre\n");
     /*fermeture des fichiers d'entrée et de sortie*/
     fclose(fe);
     fclose(fs);
