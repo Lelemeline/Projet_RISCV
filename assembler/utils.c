@@ -96,13 +96,13 @@ int normalisation_rgstr(char *tab) {
 /// @param line
 /// @param tab
 void recup_arg(int a, char *line,char tab[2][10]) {
-    while(*line==' '){ // évite la casse (si la ligne commence par un espace par exemple)
+    while(*line==' ' || *line=='\t'){ // évite la casse (si la ligne commence par un espace par exemple)
         line++;
     }
-    while (*line != ' ') { // on passe le char cons (l'instruction)
+    while (*line != ' '|| *line=='\t') { // on passe le char cons (l'instruction)
         line++;
     }
-    while(*line==' '){ // on évite la casse, on ne sait pas combien l'utilisateur a rajouté d'espaces
+    while(*line==' '|| *line=='\t'){ // on évite la casse, on ne sait pas combien l'utilisateur a rajouté d'espaces
         line++;
     }
     for (int i = 0; i < a; i++) {
@@ -114,7 +114,7 @@ void recup_arg(int a, char *line,char tab[2][10]) {
         registre[j] = '\0';
         strcpy(tab[i],registre);
         free(registre);
-        while (*line == ' ') {
+        while (*line == ' '|| *line=='\t') {
             line++;
         }
         if(*line == '('){
@@ -194,7 +194,7 @@ uint32_t identification(char *line){
         int nbr_rgstr = nbre_rgstr[L.format];
         char registre[nbr_rgstr][10];
         recup_arg(nbr_rgstr ,line,registre);
-        printf("%i\n",L.format);
+        //printf("%i\n",L.format);
         switch (L.format)
         {
             case 0: // R-type
