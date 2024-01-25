@@ -62,25 +62,36 @@ Questions à remplir _avant_ de programmer l'émulateur (10 lignes sont conseill
 
 * Listez tous les éléments matériels auxquels vous pouvez penser dont l'émulateur doit reproduire le comportement, et déduisez-en une liste de toutes les tâches individuelles de l'émulateur.
 
+Dans notre cas, l'émulateur doit imiter le comportement d'un processeur 64 bits (CPU), de ces 33 registres (32 registres + PC) ainsi que de la mémoire principale (16 kio ) tout en gérant les accès en lecture/écriture sur celle-ci (lectures/écritures de 8 ou 4 octets en fonction de l'instruction).
+Pour ce faire, l'émulateur devra :
+    - Charger toutes les instructions du programme dans la mémoire.
+    - Initialiser les registres aux bonnes valeurs (attention à sp).
+    - Exécuter les instructions chargées en mémoire jusqu à l'arrêt.
+          > Pour ce faire, il faudra correctement utiliser le registre PC qu'on incrémentera correctement à chaque lecture d'instruction.
+    - Afficher les valeurs finales des registres dans un fichier .state.
+
 L'émulateur doit reproduire le fonctionnement d'une pile 
 * Quelle fonction de la bibliothèque standard pouvez-vous utiliser pour lire les valeurs listées dans le fichier `.hex` sans vous casser la tête ? (Indice : ces valeurs ont été écrites avec `fprintf()`.)
 
-[COMPLÉTER ICI]
+On peut utiliser la fonction "fscanf()" de la bibliothèque standard qui nous permet d'éviter de convertir manuellement les valeurs hexadécimales du fichier ".hex". En effet, il suffit d'utiliser les bons formats ("%08x") pour pouvoir convertir nos valeurs hexadécimales en entier non signé plutôt que de coder le protocole nous-même.
 
 * Décrivez comment vous allez répartir les tâches de l'émulateur en différents fichiers, ou ne pas les répartir et tout faire dans le même fichier. Expliquez les avantages de votre choix.
 
-[COMPLÉTER ICI]
+Pour des problèmes de lisibilité du code, nous préférerons répartir les tâches de l'émulateur en trois fichiers :
+    - Le premier fichier qui comportera les différentes fonctions nécessaires au fonctionnement de l'émulateur (sois les fonctions nécessaires pour l'initialisation, la lecture, le décodage et l'exécution.)
+    - Le deuxième fichier qui comportera notre main : il effectua les tâches nécessaires proprement et dans l'ordre grâce au premier fichier (Initialisation puis pour chaque instruction : lecture-décodage-exécution)
+    - Le troisième fichier qui sert à déclarer les différentes fonctions, structures ...
 
 Questions à remplir _après_ avoir programmé l'émulateur :
 
 * Aviez-vous réussi à listé toutes les tâches dans la première question ? Rétrospectivement, y a-t-il des tâches dont vous aviez sous-estimé ou sur-estimé la complexité ?
 
-[COMPLÉTER ICI]
+Oui, les tâches principales ont été citées même si la complexité de leur implémentation n'était pas forcément apparente. En effet, le décodage peut nécessiter beaucoup plus d'étapes qu'on pourrait le penser et est très souvent source de petites erreurs pas toujours facile à trouver. À l'inverse, l'exécution qui pourrait paraître compliquée au premier abord l'est bien moins dès lors que le code est claire et bien structuré (structure correctement mise à jour pour stocker les différentes valeurs identifiées durant le décodage...).
 
 * Avez-vous compris le fonctionnement de chaque instruction à partir de la
 documentation fournie ? Si non, quels sont les points obscurs ?
 
-[COMPLÉTER ICI]
+Oui, la documentation fournie est très claire. De plus, les cours de CE 313 donnés au même moment permette d'accélérer et de facilité la compréhension des toutes ces instructions.  
 
 * Quels exemples de programmes avez-vous choisi pour tester le calcul ? Les
 comparaisons et sauts ? La mémoire ?
@@ -96,11 +107,11 @@ comparaisons et sauts ? La mémoire ?
 [COMPLÉTER ICI]
 
 * Cochez (en remplaçant `[ ]` par `[x]`) si vous avez :**
-  - [ ] Implémenté l'émulation de toutes les instructions gérées par le rendu 2.
-  - [ ] Implémenté l'émulation de toutes les instructions.
+  - [x] Implémenté l'émulation de toutes les instructions gérées par le rendu 2.
+  - [x] Implémenté l'émulation de toutes les instructions.
   - [ ] Tous vos tests qui passent.
-  - [ ] Vérifié que vous tests couvrent toutes les instructions émulées.
-  - [ ] Testé les cas particuliers : valeurs négatives, overflows...
+  - [x] Vérifié que vous tests couvrent toutes les instructions émulées.
+  - [x] Testé les cas particuliers : valeurs négatives, overflows...
   - [ ] Testé les cas d'erreur : division par zéro, sauts invalides... _(pas demandé par le sujet)_
   - [ ] Un port fonctionnel de DOOM pour votre émulateur.
 
