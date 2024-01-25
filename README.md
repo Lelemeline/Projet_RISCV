@@ -64,11 +64,11 @@ Questions à remplir _avant_ de programmer l'émulateur (10 lignes sont conseill
 
 Dans notre cas, l'émulateur doit imiter le comportement d'un processeur 64 bits (CPU), de ces 33 registres (32 registres + PC) ainsi que de la mémoire principale (16 kio ) tout en gérant les accès en lecture/écriture sur celle-ci (lectures/écritures de 8 ou 4 octets en fonction de l'instruction).
 Pour ce faire, l'émulateur devra :
-    - Charger toutes les instructions du programme dans la mémoire.
-    - Initialiser les registres aux bonnes valeurs (attention à sp).
-    - Exécuter les instructions chargées en mémoire jusqu à l'arrêt.
-          > Pour ce faire, il faudra correctement utiliser le registre PC qu'on incrémentera correctement à chaque lecture d'instruction.
-    - Afficher les valeurs finales des registres dans un fichier .state.
+  - Charger toutes les instructions du programme dans la mémoire.
+  - Initialiser les registres aux bonnes valeurs (attention à sp).
+  - Exécuter les instructions chargées en mémoire jusqu à l'arrêt.
+      * Pour ce faire, il faudra correctement utiliser le registre PC qu'on incrémentera correctement à chaque lecture d'instruction.
+  - Afficher les valeurs finales des registres dans un fichier .state.
 
 L'émulateur doit reproduire le fonctionnement d'une pile 
 * Quelle fonction de la bibliothèque standard pouvez-vous utiliser pour lire les valeurs listées dans le fichier `.hex` sans vous casser la tête ? (Indice : ces valeurs ont été écrites avec `fprintf()`.)
@@ -78,9 +78,9 @@ On peut utiliser la fonction "fscanf()" de la bibliothèque standard qui nous pe
 * Décrivez comment vous allez répartir les tâches de l'émulateur en différents fichiers, ou ne pas les répartir et tout faire dans le même fichier. Expliquez les avantages de votre choix.
 
 Pour des problèmes de lisibilité du code, nous préférerons répartir les tâches de l'émulateur en trois fichiers :
-    - Le premier fichier qui comportera les différentes fonctions nécessaires au fonctionnement de l'émulateur (sois les fonctions nécessaires pour l'initialisation, la lecture, le décodage et l'exécution.)
-    - Le deuxième fichier qui comportera notre main : il effectua les tâches nécessaires proprement et dans l'ordre grâce au premier fichier (Initialisation puis pour chaque instruction : lecture-décodage-exécution)
-    - Le troisième fichier qui sert à déclarer les différentes fonctions, structures ...
+  - Le premier fichier qui comportera les différentes fonctions nécessaires au fonctionnement de l'émulateur (sois les fonctions nécessaires pour l'initialisation, la lecture, le décodage et l'exécution.)
+  - Le deuxième fichier qui comportera notre main : il effectua les tâches nécessaires proprement et dans l'ordre grâce au premier fichier (Initialisation puis pour chaque instruction : lecture-décodage-exécution)
+  - Le troisième fichier qui sert à déclarer les différentes fonctions, structures ...
 
 Questions à remplir _après_ avoir programmé l'émulateur :
 
