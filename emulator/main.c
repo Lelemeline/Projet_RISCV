@@ -42,6 +42,7 @@ int main(int argc, char **argv)
         init_struct(&D);
         decode(memoire[reg[32]],&D);
         executer(D,reg);
+        //printf("PC = %i\n",reg[32]);
     }
     //printf("sortie de while\n");
     ecriture_registre(reg,fs); // écriture des registres dans le fichier .state

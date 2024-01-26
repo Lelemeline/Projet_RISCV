@@ -93,7 +93,7 @@ void decode(uint32_t line, Instruction *D){
                 D->rd  = ((31<<7)&line)>>7;
                 D->rs1 = ((31<<15)&line)>>15 ;
                 D->imm = (((4095<<20)&line)>>20); if((2048&D->imm)==2048) D->imm = conversion_signes(D->imm,12) ;//conversion_signes(D->imm);
-                //if((4096&D->imm)==4096) D->imm*=-1 ;
+                if((4096&D->imm)==4096) D->imm = conversion_signes(D->imm,11);
                 //printf("%s x%i x%i %i \n",D->instr,D->rd,D->rs1,D->imm);
                 break ;
         //S-type
@@ -101,7 +101,7 @@ void decode(uint32_t line, Instruction *D){
                 D->imm = (((31<<7)&line)>>7) + (((255<<20)&line)>>20); if((2048&D->imm)==2048) D->imm*=-1;
                 D->rs1 = ((31<<15)&line)>>15 ;
                 D->rs2 = ((31<<20)&line)>>20 ;
-                if((4096&D->imm)==4096) D->imm = conversion_signes(D->imm,12);
+                if((4096&D->imm)==4096) D->imm = conversion_signes(D->imm,11);
                 //printf("%s x%i x%i %i \n",D->instr,D->rd,D->rs1,D->imm);
                 break ;
         //B-type
@@ -109,8 +109,9 @@ void decode(uint32_t line, Instruction *D){
                 else if((4<<12)==((7<<12)&line)) D->instr = "blt" ;
                 else if((5<<12)==((7<<12)&line)) D->instr = "bge";
                 else {D->instr = "beq";}
-                D->imm = (((1<<7)&line)<<4) + (((31<<8)&line)>>7) + (((1<<31)&line)>>19) + (((127<<25)&line)>>20);
-                if((8192&D->imm)==8192) D->imm = conversion_signes(D->imm,13);
+                D->imm = (((1<<7)&line)<<4) + (((0xF<<8)&line)>>7) + (((1<<31)&line)>>19) + (((127<<25)&line)>>20);
+                if((8192&D->imm)==8192) D->imm = conversion_signes(D->imm,11)>>2;
+                else D->imm/=4;
                 D->rs1 = ((31<<15)&line)>>15;
                 D->rs2 = ((31<<20)&line)>>20;
                 //printf("%s x%i x%i %i \n",D->instr,D->rs1,D->rs2,D->imm);
@@ -119,11 +120,12 @@ void decode(uint32_t line, Instruction *D){
         case 4 :D->instr = "jal" ;
                 D->rd  = ((31<<7)&line)>>7;
                 D->imm = (((1<<31)&line)>>11) + (((1023<<21)&line)>>20) + (((1<<20)&line)>>9) + ((255<<11)&line);
-                if((1048576&D->imm)==1048576) D->imm= conversion_signes(D->imm,21);
+                if((1048576&D->imm)==1048576) D->imm= conversion_signes(D->imm,19)>>2;
+                else D->imm/=4;
                 //printf("%s x%i %i \n",D->instr,D->rd,D->imm);
         break ;
     }
-    //afficher_instr(*D);
+    afficher_instr(*D);
     //printf("%s\n",D->instr);
 }
 
@@ -135,11 +137,11 @@ void executer(Instruction D, uint32_t reg[33]){
         case 2 : reg[D.rd] = reg[D.rs1] + D.imm      ; reg[32]+=1;break ; //addi
         case 3 : reg[D.rd] = reg[(D.imm/4)&reg[D.rs1]]; reg[32]+=1;break;  //ld
         case 4 : reg[D.imm+reg[D.rs1]] = reg[D.rs2] ; reg[32]+=1;break ; //sd
-        case 5 : if(reg[D.rs1]==reg[D.rs2]) reg[32] += D.imm/4 ;break; //beq
-        case 6 : if(reg[D.rs1]!=reg[D.rs2]) reg[32] += D.imm/4 ;break; //bne
-        case 7 : if(reg[D.rs1]<reg[D.rs2])  reg[32] += D.imm/4 ;break; //blt
-        case 8 : if(reg[D.rs1]>=reg[D.rs2]) reg[32] += D.imm/4 ;break; //bge
-        case 9 : reg[D.rd] = reg[32]+1; reg[32]+=  D.imm/4; break ; //jal
+        case 5 : if(reg[D.rs1]==reg[D.rs2]) {reg[32] += D.imm ;} else reg[32]+=1; break; //beq
+        case 6 : if(reg[D.rs1]!=reg[D.rs2]) {reg[32] += D.imm ;} else reg[32]+=1;break; //bne
+        case 7 : if(reg[D.rs1]<reg[D.rs2])  {reg[32] += D.imm ;} else reg[32]+=1;break; //blt
+        case 8 : if(reg[D.rs1]>=reg[D.rs2]) {reg[32] += D.imm ;} else reg[32]+=1;break; //bge
+        case 9 : if(D.rd!=0) {reg[D.rd] = reg[32]+1;} reg[32]+=  D.imm; break ; //jal
     }
     //printf("fin execution\n");
 }
