@@ -1,6 +1,6 @@
 # Projet RISC-V CS351
 
-Auteurs : THOMAS KILLIAN et TAVIER LÉA
+Auteurs : TAVIER LÉA et THOMAS KILLIAN
 
 ## Rendu 1
 
@@ -56,71 +56,65 @@ Au début, la description semblait obscure, mais peu à peu, en avançant dans l
 
 
 ## Rendu 3
-```Date de rendu 19/01```
-
 Questions à remplir _avant_ de programmer l'émulateur (10 lignes sont conseillées à chaque fois pour bien y réfléchir) :
 
 * Listez tous les éléments matériels auxquels vous pouvez penser dont l'émulateur doit reproduire le comportement, et déduisez-en une liste de toutes les tâches individuelles de l'émulateur.
 
-Dans notre cas, l'émulateur doit imiter le comportement d'un processeur 64 bits (CPU), de ces 33 registres (32 registres + PC) ainsi que de la mémoire principale (16 kio ) tout en gérant les accès en lecture/écriture sur celle-ci (lectures/écritures de 8 ou 4 octets en fonction de l'instruction).
+Dans notre cas, l'émulateur doit imiter le comportement d'un processeur 64 bits (CPU), de ces 33 registres (32 registres + PC) ainsi que de la mémoire principale (16 kio ) tout en gérant les accès en lecture/écriture sur celle-ci.
 Pour ce faire, l'émulateur devra :
   - Charger toutes les instructions du programme dans la mémoire.
   - Initialiser les registres aux bonnes valeurs (attention à sp).
   - Exécuter les instructions chargées en mémoire jusqu à l'arrêt.
-      * Pour ce faire, il faudra correctement utiliser le registre PC qu'on incrémentera correctement à chaque lecture d'instruction.
+      Pour ce faire, il faudra correctement utiliser le registre PC qu'on incrémentera correctement à chaque lecture d'instruction.
   - Afficher les valeurs finales des registres dans un fichier .state.
 
-L'émulateur doit reproduire le fonctionnement d'une pile 
+
 * Quelle fonction de la bibliothèque standard pouvez-vous utiliser pour lire les valeurs listées dans le fichier `.hex` sans vous casser la tête ? (Indice : ces valeurs ont été écrites avec `fprintf()`.)
 
-On peut utiliser la fonction "fscanf()" de la bibliothèque standard qui nous permet d'éviter de convertir manuellement les valeurs hexadécimales du fichier ".hex". En effet, il suffit d'utiliser les bons formats ("%08x") pour pouvoir convertir nos valeurs hexadécimales en entier non signé plutôt que de coder le protocole nous-même.
+On peut utiliser la fonction "fscanf()" de la bibliothèque standard qui nous permet d'éviter de convertir manuellement les valeurs hexadécimales du fichier ".hex".
+On utilise le format : fscanf(fe,"%08x ",&adresse) et on lit tant que le fichier n'est pas fini (on reçoit EOF).
 
 * Décrivez comment vous allez répartir les tâches de l'émulateur en différents fichiers, ou ne pas les répartir et tout faire dans le même fichier. Expliquez les avantages de votre choix.
 
-Pour des problèmes de lisibilité du code, nous préférerons répartir les tâches de l'émulateur en trois fichiers :
-  - Le premier fichier qui comportera les différentes fonctions nécessaires au fonctionnement de l'émulateur (sois les fonctions nécessaires pour l'initialisation, la lecture, le décodage et l'exécution.)
-  - Le deuxième fichier qui comportera notre main : il effectua les tâches nécessaires proprement et dans l'ordre grâce au premier fichier (Initialisation puis pour chaque instruction : lecture-décodage-exécution)
-  - Le troisième fichier qui sert à déclarer les différentes fonctions, structures ...
+Nous avons préférer répartir les tâches de l'émulateur en trois fichiers, afin d'avoir un code plus lisible :
+  - Le premier fichier comporte les différentes fonctions nécessaires au fonctionnement de l'émulateur (executer.c)
+   - Le deuxième fichier est la librairie de l'émulateur ( executer.h). On y retrouve les déclarations des fonctions de executer.c et la déclaration de la structure Instruction.
+  - Le troisième fichier comporte notre main : c'est lui qui permet d'appeler les différentes fonctions afin de lancer l'émulateur. On y trouve la lecture des instructions, et le chargement dans la mémoire, puis la boucle lecture décodage exécution.
 
 Questions à remplir _après_ avoir programmé l'émulateur :
 
 * Aviez-vous réussi à listé toutes les tâches dans la première question ? Rétrospectivement, y a-t-il des tâches dont vous aviez sous-estimé ou sur-estimé la complexité ?
 
-Oui, les tâches principales ont été citées même si la complexité de leur implémentation n'était pas forcément apparente. En effet, le décodage peut nécessiter beaucoup plus d'étapes qu'on pourrait le penser et est très souvent source de petites erreurs pas toujours facile à trouver. À l'inverse, l'exécution qui pourrait paraître compliquée au premier abord l'est bien moins dès lors que le code est claire et bien structuré (structure correctement mise à jour pour stocker les différentes valeurs identifiées durant le décodage...).
+Nous avions réussi à tout lister dans la première question.
+Certaines tâches,comme l'exécution ou le décodage, se sont révélées plus simples à coder que prévu.
+En revanche, des difficultés ont été rencontrées dans la gestion des immédiats, pour la conversion des négatifs.
 
 * Avez-vous compris le fonctionnement de chaque instruction à partir de la
 documentation fournie ? Si non, quels sont les points obscurs ?
 
-Oui, la documentation fournie est très claire. De plus, les cours de CE 313 donnés au même moment permette d'accélérer et de facilité la compréhension des toutes ces instructions.  
+La documentation était claire. Il faut néanmoins soulever une petite coquille (toute petite) sur l'instruction sd, mais cela restait compréhensible.
 
 * Quels exemples de programmes avez-vous choisi pour tester le calcul ? Les
 comparaisons et sauts ? La mémoire ?
 
-[COMPLÉTER ICI]
+Chaque fichier a pour but de tester une instruction en particulier. Nous testons avec des valeurs positives et négatives. Pour les comparaisons et les sauts, nous pensons bien à diviser par 4 les valeurs de saut ( les immédiats) car notre mémoire est un tableau d'éléments de 4 octets.
 
 * Reste-t-il des bugs que vous avez découverts et pas corrigés ?
 
-[COMPLÉTER ICI]
+À priori toutes les bugs découverts lors de l'écriture des tests ont été corrigés.
 
 * D'autres remarques sur votre programme ?
 
-[COMPLÉTER ICI]
+Notre programme est beaucoup plus permissif sur le code assembleur que le compilateur clang (notamment avec la suppression des tab).
 
 * Cochez (en remplaçant `[ ]` par `[x]`) si vous avez :**
   - [x] Implémenté l'émulation de toutes les instructions gérées par le rendu 2.
   - [x] Implémenté l'émulation de toutes les instructions.
-  - [ ] Tous vos tests qui passent.
+  - [x] Tous vos tests qui passent.
   - [x] Vérifié que vous tests couvrent toutes les instructions émulées.
   - [x] Testé les cas particuliers : valeurs négatives, overflows...
-  - [ ] Testé les cas d'erreur : division par zéro, sauts invalides... _(pas demandé par le sujet)_
-  - [ ] Un port fonctionnel de DOOM pour votre émulateur.
+  - [ ] Testé les cas d'erreur : division par zéro, sauts invalides... _(pas demandé par le sujet)_ les sauts invalides génèrent des core dumped.
+  - [ ] Un port fonctionnel de DOOM pour votre émulateur. --> Non je ne suis pas Julien
 
 * Des retours sur le projet en général ?
-
-[COMPLÉTER ICI]
-#Projet_MIPS
-# Projet_MIPS
-# Projet_MIPS
-# Projet_MIPS
-# Projet_MIPS
-# Projet_MIPS
+Plutôt intéressant, et instructif. C'était sympa que le projet soit en lien avec le cours de CE313.
